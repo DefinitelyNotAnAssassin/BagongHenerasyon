@@ -65,8 +65,15 @@ def register(request):
                 qr_io.seek(0)
 
                 user.qr_code.save(f'{user.bh_id}.png', File(qr_io), save=False)
-                user.longitude = request.POST.get('longitude', 121.05090000)
-                user.latitude = request.POST.get('latitude', 14.64880000)
+                try:
+                    user.longitude = float(request.POST.get('longitude', 121.05090000))
+                except ValueError:
+                    user.longitude = 121.05090000
+
+                try:
+                    user.latitude = float(request.POST.get('latitude', 14.64880000))
+                except ValueError:
+                    user.latitude = 14.64880000
                 user.save()
                 form.save()
                 login_user(request, user)
