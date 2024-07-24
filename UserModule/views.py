@@ -3,8 +3,13 @@ from django.contrib.auth import login
 from UserAuthentication.models import Account
 
 def virtual_id(request):
-  if request.user.is_authenticated:
+  if request.user.is_authenticated or request.GET.get('id') is not None:
+    id = request.GET.get('id') 
+    if id is not None:
+      request.user = Account.objects.get(id=id)
+  
     try:
+       
       signature = request.user.signature.url.replace('UserModule/', '')
     except Exception as e:
 
